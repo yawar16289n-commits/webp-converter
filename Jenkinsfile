@@ -8,13 +8,13 @@ pipeline {
     stages {
         stage('Install Netlify CLI') {
             steps {
-                bat 'npm install -g netlify-cli'
+                bat 'npm install netlify-cli'
             }
         }
 
         stage('Deploy to Netlify') {
             steps {
-                bat 'netlify deploy --dir=. --prod --auth=%NETLIFY_AUTH_TOKEN% --f35f05ff-2049-4e27-a8c4-a44170b30c43'
+                bat 'npx netlify deploy --dir=. --prod --auth=%NETLIFY_AUTH_TOKEN% --site=f35f05ff-2049-4e27-a8c4-a44170b30c43'
             }
         }
     }
