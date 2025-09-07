@@ -19,6 +19,22 @@
       padding: 40px 20px;
     }
 
+    nav {
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: #00cec9;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     h1 {
       font-size: 2.6em;
       margin-bottom: 25px;
@@ -152,6 +168,11 @@
 </head>
 <body>
 
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+  </nav>
+
   <h1>Image Convertersssss – By Muhammad Yawar</h1>
 
   <label class="upload-box">
@@ -174,6 +195,7 @@
   <div class="gallery" id="gallery"></div>
 
   <script>
+    // Your existing JavaScript code remains unchanged
     const imageInput = document.getElementById('imageInput');
     const gallery = document.getElementById('gallery');
     const formatControls = document.getElementById('formatControls');
