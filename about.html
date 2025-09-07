@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us – WebP Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    nav {
+      margin-bottom: 30px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: #00cec9;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    h1 {
+      font-size: 2.4em;
+      color: #00cec9;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .about-container {
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .about-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+  </nav>
+
+  <h1>About Us</h1>
+
+  <div class="about-container">
+    <p>
+      Welcome to the WebP Image Converter! This simple tool was created by <strong>Muhammad Yawar</strong> to make converting images into the WebP format quick and easy.
+    </p>
+    <p>
+      Our goal is to help users reduce image file sizes while maintaining quality, which is especially helpful for web performance and storage savings.
+    </p>
+    <p>
+      All conversions happen locally in your browser — we do not upload or store your images. It's private, secure, and super fast.
+    </p>
+    <p>
+      Whether you're a developer, designer, or just someone with a bunch of JPGs or PNGs to convert, we hope this tool makes your work easier.
+    </p>
+    <p>
+      Thanks for using our converter!
+    </p>
+  </div>
+
+</body>
+</html>

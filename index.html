@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Converter – Muhammad Yawar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.6em;
+      margin-bottom: 25px;
+      color: #00cec9;
+      text-align: center;
+    }
+
+    .upload-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 20px;
+      max-width: 500px;
+      width: 100%;
+      color: #cccccc;
+      transition: border 0.3s, background 0.3s;
+    }
+
+    .upload-box:hover {
+      border-color: #00cec9;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .controls {
+      display: none;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .controls select, .controls button {
+      padding: 10px 16px;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      margin: 5px;
+      font-weight: 600;
+    }
+
+    .controls select {
+      background: #ffffff;
+      color: #2c3e50;
+    }
+
+    .controls button {
+      background: #00cec9;
+      color: white;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: #00b894;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      backdrop-filter: blur(8px);
+      padding: 20px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+      max-width: 250px;
+      width: 100%;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .download-button {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #00b894;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .download-button:hover {
+      background: #019875;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      background-color: #d63031;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .close-btn:hover {
+      background-color: #e17055;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Image Converter – By Muhammad Yawar</h1>
+
+  <label class="upload-box">
+    Click to Upload Images (JPG, PNG)
+    <input type="file" id="imageInput" accept="image/*" multiple />
+  </label>
+
+  <div class="controls" id="formatControls">
+    <select id="formatSelect">
+      <option value="" selected disabled>Select a format</option>
+      <option value="webp">WebP</option>
+      <option value="jpeg">JPEG</option>
+      <option value="png">PNG</option>
+    </select>
+    <button id="convertBtn">Convert</button>
+    <button id="downloadAllBtn" style="background: #0984e3;">⬇️ Download All</button>
+    <button id="clearAllBtn" style="background: #d63031;">🗑️ Remove All</button>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const gallery = document.getElementById('gallery');
+    const formatControls = document.getElementById('formatControls');
+    const formatSelect = document.getElementById('formatSelect');
+    const convertBtn = document.getElementById('convertBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+    let uploadedFiles = [];
+    let convertedImages = [];
+
+    imageInput.addEventListener('change', function () {
+      uploadedFiles = Array.from(this.files);
+      if (uploadedFiles.length > 0) {
+        formatControls.style.display = 'block';
+        gallery.innerHTML = ''; // Clear previous conversions
+        convertedImages = []; // Reset
+      }
+    });
+
+    convertBtn.addEventListener('click', function () {
+      const selectedFormat = formatSelect.value;
+      if (!selectedFormat) {
+        alert("Please select a format.");
+        return;
+      }
+
+      gallery.innerHTML = '';
+      convertedImages = [];
+
+      uploadedFiles.forEach(file => {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            let mimeType = 'image/webp';
+            let extension = 'webp';
+
+            if (selectedFormat === 'jpeg') {
+              mimeType = 'image/jpeg';
+              extension = 'jpg';
+            } else if (selectedFormat === 'png') {
+              mimeType = 'image/png';
+              extension = 'png';
+            }
+
+            canvas.toBlob(blob => {
+              const outputUrl = URL.createObjectURL(blob);
+              const card = document.createElement('div');
+              card.className = 'card';
+
+              const closeBtn = document.createElement('span');
+              closeBtn.innerHTML = '&times;';
+              closeBtn.className = 'close-btn';
+              closeBtn.addEventListener('click', () => {
+                gallery.removeChild(card);
+                convertedImages = convertedImages.filter(img => img.blob !== blob);
+                URL.revokeObjectURL(outputUrl);
+                if (convertedImages.length === 0) formatControls.style.display = 'block';
+              });
+
+              const previewImg = document.createElement('img');
+              previewImg.src = outputUrl;
+
+              const downloadBtn = document.createElement('a');
+              downloadBtn.href = outputUrl;
+              downloadBtn.download = file.name.replace(/\.\w+$/, `.${extension}`);
+              downloadBtn.className = 'download-button';
+              downloadBtn.innerText = `Download ${extension.toUpperCase()}`;
+
+              card.appendChild(closeBtn);
+              card.appendChild(previewImg);
+              card.appendChild(downloadBtn);
+              gallery.appendChild(card);
+
+              convertedImages.push({ blob, filename: downloadBtn.download });
+            }, mimeType);
+          };
+          img.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+      });
+    });
+
+    clearAllBtn.addEventListener('click', () => {
+      gallery.innerHTML = '';
+      convertedImages = [];
+    });
+
+    downloadAllBtn.addEventListener('click', () => {
+      convertedImages.forEach(({ blob, filename }) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    });
+  </script>
+
+</body>
+</html>
